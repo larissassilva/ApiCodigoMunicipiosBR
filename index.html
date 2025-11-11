@@ -1,7 +1,60 @@
-<html>
-  
-</html>
-<script>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca de Código de Município</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+        input[type="text"], button {
+            padding: 10px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #resultado {
+            margin-top: 20px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        .codigo-encontrado {
+            font-weight: bold;
+            color: #0066cc;
+            font-size: 1.2em;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🔎 Busca de Código de Município por Nome</h1>
+    </header>
+    
+    <main>
+        <input type="text" id="inputMunicipio" placeholder="Digite o nome do município">
+        
+        <button onclick="buscarCodigo()">Buscar Código</button>
+        
+        <div id="resultado">
+            O código do município aparecerá aqui.
+        </div>
+    </main>
+
+    <script>
   let codMunicipos = [
   {
     "Nome_UF": "Rondônia",
@@ -33430,4 +33483,44 @@
     "": ""
   }
 ]
-</script>
+function buscarCodigo() {
+            // Pega o valor digitado no input e remove espaços extras
+            const nomeDigitado = document.getElementById('inputMunicipio').value.trim();
+            
+            // Elemento onde o resultado será exibido
+            const resultadoDiv = document.getElementById('resultado');
+            
+            if (nomeDigitado === "") {
+                resultadoDiv.innerHTML = '🚨 Por favor, **digite o nome** de um município para buscar.';
+                return;
+            }
+
+            // Normaliza o nome digitado para a busca (minúsculas)
+            const nomeBusca = nomeDigitado.toLowerCase();
+
+            // 1. Usa o método find() para buscar o primeiro objeto que corresponde ao critério.
+            // A busca é feita de forma flexível (case-insensitive)
+            const municipioEncontrado = codMunicipos.find(municipio => 
+                municipio["Nome_Município"].toLowerCase() === nomeBusca
+            );
+
+            // 2. Verifica se um município foi encontrado
+            if (municipioEncontrado) {
+                const codigo = municipioEncontrado["Código Município Completo"];
+                const nome = municipioEncontrado["Nome_Município"];
+                const uf = municipioEncontrado["Nome_UF"];
+                
+                resultadoDiv.innerHTML = `
+                    ✅ **Município Encontrado:** ${nome} - ${uf}<br>
+                    **Código do Município (IBGE):** <span class="codigo-encontrado">${codigo}</span>
+                `;
+            } else {
+                resultadoDiv.innerHTML = `
+                    ❌ **Município Não Encontrado.**<br>
+                    Não foi possível encontrar o município **"${nomeDigitado}"** na sua lista de dados.
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
